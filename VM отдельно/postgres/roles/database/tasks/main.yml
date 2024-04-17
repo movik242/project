@@ -241,11 +241,6 @@
     src: files/default-ssl.conf
     dest: /etc/apache2/sites-enabled/default-ssl.conf
 
-- name: copy fail 50-cloud-init.conf # отключаем вход ssh по паролю
-  copy:
-    src: files/50-cloud-init.conf  
-    dest: /etc/ssh/sshd_config.d/50-cloud-init.conf    
-     
 - name: Enable service #Включение сервисов
   ansible.builtin.service:
     name: '{{ item }}'
