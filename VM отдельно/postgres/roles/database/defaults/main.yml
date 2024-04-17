@@ -1,0 +1,5 @@
+---
+postgresql_apt_key: 'https://www.postgresql.org/media/keys/ACCC4CF8.asc'
+postgresql_apt_repo_url: 'deb http://apt.postgresql.org/pub/repos/apt focal-pgdg main'
+pgadmin_apt_key: 'https://www.pgadmin.org/static/packages_pgadmin_org.pub'
+pgadmin_apt_repo_url: 'deb https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/focal pgadmin4 main'

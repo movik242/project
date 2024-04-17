@@ -1,0 +1,3 @@
+db_user: "zabbix"
+db_password: "admin"
+db_name: "psql"
