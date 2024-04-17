@@ -107,18 +107,12 @@
     name: zabbix
     password: admin
     
-#- name: Add the user with a specific uid and a primary group
-#    name: zabbix
-#    uid: 1001
-#    group: zabbix   
-    
 - name: Add the user with a bash shell
   ansible.builtin.user:
     name: zabbix
     shell: /bin/bash
     groups: root
     append: yes
-    
 
 - name: "Install Python packages"
   apt: "name={{ item }}  state=present"
