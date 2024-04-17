@@ -127,11 +127,6 @@
     src: files/zabbix.conf
     dest: /etc/nginx/conf.d/zabbix.conf
 
-- name: copy fail 50-cloud-init.conf # отключаем вход ssh по паролю
-  copy:
-    src: files/50-cloud-init.conf  
-    dest: /etc/ssh/sshd_config.d/50-cloud-init.conf    
-
 - name: copy fail rsyslog # копируем rsyslog
   copy:
     src: files/rsyslog.conf
