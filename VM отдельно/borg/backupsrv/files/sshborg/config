@@ -1,0 +1,3 @@
+Host inetrout
+User root
+IdentityFile /root/.ssh/id_rsa
