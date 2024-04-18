@@ -1,0 +1,11 @@
+[Unit]
+Description=Automated Borg Backup
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c "borg create -C zstd borg@backup:/opt/backup/rsyslogsrv::etc-$(date +%%Y%%m%%d_%%H%%M%%S) /etc"
+ExecStart=borg prune --keep-daily 14 --keep-weekly 8 --keep-monthly 12 borg@backup:/opt/backup/rsyslogsrv
+
+[Install]
+WantedBy=multi-user.target
