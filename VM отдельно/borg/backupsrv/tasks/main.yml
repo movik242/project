@@ -110,13 +110,13 @@
     
 - name: Create directory data1 if does not exist
   file:
-    path: '/opt/backup'
+    path: '/opt/backup/'
     state: directory
     mode: '0755'
 
 - name: Change file ownership, group and permissions
   ansible.builtin.file:
-    path: '/opt/backup'
+    path: '/opt/backup/'
     state: directory
     owner: borg
     group: borg
