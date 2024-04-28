@@ -1,9 +1,5 @@
 ---
 # tasks file for backupsrv
-- name: Pause for 5 minutes to build app cache
-  pause:
-    minutes: 5
-
 - name: set timezone to Moscow
   timezone:
     name: Europe/Moscow
