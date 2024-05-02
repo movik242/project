@@ -1,0 +1,120 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>Веб проект по курсу Administrator Linux. Professional от OTUS</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<h2>Веб проект с развертыванием нескольких виртуальных машин</h2>
+
+<p class="link">Проект состоит из 5 виртуальных машин: zabbix, inetrout, postgres, backup, rsyslog</p>
+<hr class=".my-element"></hr>
+<div class="textp">
+<a href="https://192.168.50.15">Inetrout</a> - шлюз, на сервере настроен iptables, для остальные ВМ выход в сеть интернет настроен через этот шлюз. И предсталенная сейчас веб страница.
+</div></br>
+
+<div class="navbar">
+<li>Вход на сервер vagrant ssh inetrout</li>
+<li>Для свободного перехода по сайтам </li>
+</div></br>
+
+<div class="textp"> 
+<a href="inetrout/Снимок.jpg">hosts</a>
+</div></br>
+<hr class=".my-element"></hr>
+
+<div class="textp">
+<a href="https://192.168.50.10/pgadmin4">Postgres</a> - база данных, при развертывании устанавливается и настраиваться база данных zabbix. Для подключения и настройки, 
+можно воспользоваться pgadmin:
+</div></br>
+
+<div class="navbar">
+<li>логин pgadmin: movik242@pro.ru</li>
+<li>пароль pgadmin: movik242 </li>
+<li>имя БД: zabbix </li>
+<li>логин БД: zabbix </li>
+<li>пароль БД: admin </li>
+</div></br>
+
+<div class="textp">
+Настройка поключения представлена на следующих скриншотах
+</div></br>
+
+<div class="textp"> 
+<a href="postgres/Снимок.jpg">скрин-1</a>   <a href="postgres/Снимок1.jpg">скрин-2</a> <a href="postgres/Снимок2.jpg">скрин-3</a> <a href="postgres/Снимок3.jpg">Настроенный postgres</a>
+</div></br>
+
+<hr class=".my-element"></hr>
+
+<div class="textp">
+<a href="https://192.168.50.11">Zabbix</a> - система по сбору метрик, для подключения к БД используются следующие данные:
+</div></br>
+
+<div class="navbar">
+<li>имя БД: zabbix </li>
+<li>логин БД: zabbix </li>
+<li>пароль БД: admin </li>
+<li>логин для zabbix: Admin</li>
+<li>пароль zabbix: zabbix</li>
+</div></br>
+
+<div class="textp">
+Настройка поключения представлена на следующих скриншотах
+</div></br>
+
+<div class="textp">
+<a href="zabbix/Снимок.jpg">скрин-1</a> <a href="zabbix/Снимок1.jpg">скрин-2</a> <a href="zabbix/Снимок2.jpg">скрин-3</a> <a href="zabbix/Снимок3.jpg">скрин-4</a> <a href="zabbix/Снимок4.jpg">скрин-5</a>  <a href="zabbix/Снимок5.jpg">Настроенный zabbix</a>
+</div></br>
+
+<hr class=".my-element"></hr>
+
+<div class="textp">
+<a href="https://192.168.50.12/loganalyzer">Rsyslog</a> - система по сбору логов, представлена в виде веб интерфейса loganalyzer:
+</div></br>
+
+<div class="navbar">
+<li>имя БД loganalyzer: loganalyzer </li>
+<li>логин БД loganalyzer: logan </li>
+<li>пароль БД loganalyzer: admin </li>
+<li>Username шаг 6: <Ваш пользователь></li>
+<li>Password шаг 6: <Ваш пароль></li>
+<li>Source Type шаг 7 : MYSQL natuve</li>
+<li>Имя БД шаг 7: rsyslog</li>
+<li>Имя таблицы шаг 7: SystemEvents (ВАЖНО: первые буквы заглавные)</li>
+<li>User БД: rsyslog</li>
+<li>пароль БД: admin</li>
+</div></br>
+
+<div class="textp">
+Настройка поключения представлена на следующих скриншотах
+</div></br>
+
+<div class="textp">
+<a href="rsyslog/Снимок1.jpg">скрин-1</a> <a href="rsyslog/Снимок2.jpg">скрин-2</a> <a href="rsyslog/Снимок3.jpg">скрин-3</a> <a href="rsyslog/Снимок4.jpg">скрин-4</a> <a href="rsyslog/Снимок5.jpg">скрин-5</a>  <a href="rsyslog/Снимок6.jpg">скрин-6</a> <a href="rsyslog/Снимок7.jpg">скрин-7</a> <a href="rsyslog/Снимок8.jpg">скрин-8</a> <a href="rsyslog/Снимок9.jpg">скрин-9</a> <a href="rsyslog/Снимок10.jpg">Настроенный loganalizer</a>
+</div></br>
+
+<hr class=".my-element"></hr>
+
+<div class="textp">
+<a href="">Backup</a> - система бекапа, в каждой ВМ настроен сервис и таймер для бекапа папки etc (для примера), по аналогии в файл сервиса можно добавить другие папки и файлы
+</div></br>
+
+<div class="navbar">
+<li>Войти на сервер по ssh можно только через сервер inetrout - шлюз. Вход на сервер backup организован по ssh по ключу под borg, либо по паролю под vagrant (пример: ssh borg@backup)</li>
+<li>Чтобы создать первый бэкап, требуется зайти, на каждую ВМ и выполнить следующие команды (для каждой ВМ свой путь бэкапа)</li>
+</br>
+<lo>sudo borg init -e none borg@backup:/opt/backup/inetrout</lo></br>
+<lo>sudo borg create -C zstd borg@backup:/opt/backup/<font>inetrout</font>::etc-$(date +%%Y%%m%%d_%%H%%M%%S) /etc</lo>
+</div></br>
+
+<div class="textp">
+<a href="backup/Снимок.jpg">List бэкапа</a>
+</div></br>
+
+<hr class=".my-element"></hr>
+
+
+</body>
+</html>

@@ -1,0 +1,55 @@
+body {
+  width: 70em;
+  margin: 0 auto;
+  font-family: Tahoma, Verdana, Arial, sans-serif; }
+  
+hr {
+  display: block;
+  unicode-bidi: isolate;
+  -webkit-margin-before: 0.5em;
+  -webkit-margin-after: 0.5em;
+  -webkit-margin-start: auto;
+  -webkit-margin-end: auto;
+  overflow: hidden;
+  border-style: inset;
+  border-width: 5px; }
+  
+h2 {
+  font-size: 30px;
+  text-align: center;
+  margin: 1em;
+  padding: 1em; }
+
+.textp {
+	font-size: 21px;}	
+
+font {
+	color: red;
+	margin: 0 auto;
+	}
+
+a {
+	padding: 5px; 
+	margin: 2px;}		
+
+lo {
+	padding: 50px; 
+	margin: 2px; }
+
+
+.navbar {
+  width: 58em;
+  font-size: 18px;
+  background: white;
+  margin: 0 auto; }
+  
+.link {
+  font-size: 25px }
+  
+a:visited {
+  color: purple }
+  
+address {
+  margin-top: 1em;
+  padding-top: 1em;
+  border-top: thin dotted }

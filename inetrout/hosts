@@ -1,0 +1,2 @@
+[servers]
+inetrout ansible_host=192.168.50.15 ansible_user=vagrant ansible_ssh_private_key_file=.vagrant/machines/inetrout/virtualbox/private_key 

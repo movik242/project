@@ -1,0 +1,6 @@
+---
+- hosts: inetrout
+  become: yes
+  roles:
+    - inetrout
+...

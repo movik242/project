@@ -1,0 +1,211 @@
+---
+# tasks file for inetrout
+- name: set timezone to Moscow
+  timezone:
+    name: Europe/Moscow
+
+- name: Update Repository cache # загружаем репозитории локально
+  ansible.builtin.apt:
+    update_cache: true
+
+- name: Reload service
+  ansible.builtin.service:
+    name: '{{ item }}'
+    state: stopped
+  with_items:
+    - 'ufw' 
+
+- name: Reload service
+  ansible.builtin.service:
+    name: '{{ item }}'
+    enabled: no
+  with_items:
+    - 'ufw' 
+
+- name: Install # установка зависимости
+  ansible.builtin.apt:
+    name: '{{ item }}'
+    state: present
+  with_items:
+    - 'nginx'
+    - 'net-tools'
+    - 'wget'
+    - 'bash-completion'
+    - 'zabbix-agent'
+    - 'traceroute'
+    - 'iptables'
+    - 'openssl'
+    - 'iptables-persistent'
+    - 'rsyslog-mysql'
+    - 'borgbackup'
+    - 'easy-rsa'
+    - 'iptables-persistent'
+   
+- name: copy fail hosts # копируем hosts для настройки отображения
+  copy:
+    src: files/hosts
+    dest: /etc/hosts 
+
+- name: copy fail rsyslog.conf # копируем rsyslog.conf настройка портов
+  copy:
+    src: files/rsyslog.conf 
+    dest: /etc/rsyslog.conf   
+
+- name: copy fail zabbix-agentd.conf # копируем zabbix-agentd.conf, настройка подключения к zabbix
+  copy:
+    src: files/zabbix_agentd.conf
+    dest: /etc/zabbix/zabbix_agentd.conf
+
+- name: Copy key to backup
+  ansible.builtin.copy:
+    src:  files/sshborg/
+    dest: /root/.ssh/
+    directory_mode: yes  
+
+- name: Creates directory
+  ansible.builtin.file:
+    path: /root/.ssh/
+    state: directory
+    mode: '0700'    
+    
+- name: Chmod 666
+  ansible.builtin.file:
+    path: /root/.ssh/id_rsa
+    mode: '0600'
+ 
+- name: Chmod 666
+  ansible.builtin.file:
+    path: /root/.ssh/id_rsa.pub
+    mode: '0600'
+
+- name: Chmod 666
+  ansible.builtin.file:
+    path: /root/.ssh/config
+    mode: '0600'    
+
+- name: Copy timer, service to backup
+  ansible.builtin.copy:
+    src: files/borg-backup.service
+    dest: /etc/systemd/system/borg-backup.service
+    
+- name: Copy timer, service to borg
+  ansible.builtin.copy:
+    src: files/borg-backup.timer
+    dest: /etc/systemd/system/borg-backup.timer     
+    
+- name: Copy key for https
+  ansible.builtin.copy:
+    src: files/sslhttps/
+    dest: /usr/local/share/ca-certificates/
+    directory_mode: yes
+
+- name: install ca package on debian systems
+  apt:
+    name: ca-certificates
+    state: present
+    update_cache: yes 
+
+- name: Copy key to vagrant
+  ansible.builtin.copy:
+    src:  files/sshvagrant/
+    dest: /home/vagrant/.ssh/
+    directory_mode: yes  
+
+- name: Creates directory
+  ansible.builtin.file:
+    path: /home/vagrant/.ssh/
+    state: directory
+    mode: '0700'    
+    
+- name: Chmod 666
+  ansible.builtin.file:
+    path: //home/vagrant/.ssh/id_rsa
+    mode: '0600'
+ 
+- name: Chmod 666
+  ansible.builtin.file:
+    path: /home/vagrant/.ssh/id_rsa.pub
+    mode: '0600'
+
+- name: Chmod 666
+  ansible.builtin.file:
+    path: /home/vagrant/.ssh/authorized_keys
+    mode: '0600'    
+
+- name: Creates directory
+  ansible.builtin.file:
+    path: /etc/nginx/certs
+    state: directory
+    
+- name: Copy key for https
+  ansible.builtin.copy:
+    src: files/sslhttps/inetrout.crt
+    dest: /etc/nginx/certs/inetrout.crt
+  
+- name: Copy key for https
+  ansible.builtin.copy:
+    src: files/sslhttps/inetrout.key
+    dest: /etc/nginx/certs/inetrout.key
+
+- name: Copy iptables
+  ansible.builtin.copy:
+    src:  files/iptables/
+    dest: /etc/iptables/
+    directory_mode: yes 
+
+- name: Copy sysctl
+  ansible.builtin.copy:
+    src:  files/sysctl.conf
+    dest: /home/vagrant/sysctl.conf
+    
+- name: Copy sysctl
+  ansible.builtin.copy:
+    src:  /home/vagrant/sysctl.conf
+    dest: /etc/sysctl.conf
+    remote_src: yes
+
+- name: Copy inetrout
+  ansible.builtin.copy:
+    src:  files/inetrout.conf
+    dest: /home/vagrant/inetrout.conf
+    
+- name: Copy inetrout
+  ansible.builtin.copy:
+    src:  /home/vagrant/inetrout.conf
+    dest: /etc/nginx/sites-enabled/inetrout.conf
+    remote_src: yes    
+    
+- name: Copy iptables
+  ansible.builtin.copy:
+    src:  files/site/
+    dest: /var/www/html/
+    directory_mode: yes     
+    
+- name: Chmod directory
+  ansible.builtin.shell:
+    cmd: bash -c "find /var/www/html/ -type d -exec chmod 755 {} \;"
+    
+- name: Chmod file
+  ansible.builtin.shell:
+    cmd: bash -c "find /var/www/html/ -type f -exec chmod 644 {} \;"    
+    
+- name: Reload service # Перезапускаем службы
+  ansible.builtin.service:
+    name: '{{ item }}'
+    state: started
+  with_items:
+    - 'netfilter-persistent'  
+  ignore_errors: yes  
+    
+- name: Reload service # Перезапускаем службы
+  ansible.builtin.service:
+    name: '{{ item }}'
+    state: restarted
+  with_items:
+    - 'zabbix-agent'  
+    - 'rsyslog'
+    - 'nginx'
+    - 'netfilter-persistent' 
+
+
+

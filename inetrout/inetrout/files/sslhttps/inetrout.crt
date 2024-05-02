@@ -1,0 +1,76 @@
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number:
+            8c:e3:5a:0c:57:7f:1f:b1:c9:6f:5a:b1:7f:06:e8:4f
+        Signature Algorithm: ecdsa-with-SHA512
+        Issuer: CN=pro.ru
+        Validity
+            Not Before: Apr 17 07:24:49 2024 GMT
+            Not After : Apr  2 07:24:49 2027 GMT
+        Subject: C=ru, ST=piter, L=piter, O=pro.ru, OU=pro.ru, CN=inetrout/emailAddress=admin@pro.ru
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                RSA Public-Key: (2048 bit)
+                Modulus:
+                    00:d6:84:83:70:07:49:04:4d:3c:31:98:ea:01:c1:
+                    6f:27:a5:42:47:5e:03:cc:3a:21:67:8b:4d:8d:31:
+                    c8:f3:bd:06:04:60:75:35:c8:97:bc:4a:88:5d:74:
+                    54:50:a1:78:8e:5f:ef:3d:28:c3:86:fe:d3:29:b1:
+                    44:9d:57:eb:ac:c5:61:fc:50:92:ed:67:b4:ca:1b:
+                    7d:21:82:91:37:b6:75:1b:a0:d7:47:d5:6c:55:3d:
+                    27:91:6f:83:10:09:3d:e4:a4:c4:83:b5:9b:3e:80:
+                    65:8a:69:c3:0a:e9:f9:49:38:73:3f:88:1c:1d:9e:
+                    34:48:42:1a:cb:98:b6:33:de:3f:ff:a4:a3:0d:c9:
+                    e6:2b:03:9e:5f:08:95:7b:f4:41:bf:fc:d5:a9:e9:
+                    4c:3a:5c:d4:15:00:ab:ce:37:b9:3c:be:e7:5d:b7:
+                    57:a4:93:f0:6c:3d:12:90:e5:83:c0:ac:73:ba:e6:
+                    24:82:8b:14:ea:ff:0c:a9:5c:f6:cc:69:31:9a:1d:
+                    b9:15:d6:67:81:f9:f1:85:96:76:c6:02:c7:b4:7d:
+                    c0:ee:5d:64:b2:11:65:06:69:98:fa:cd:e9:49:ec:
+                    c1:44:1b:d2:f2:8c:08:67:9a:ee:7a:f5:a4:a1:d8:
+                    86:ee:e6:43:1a:b4:fc:c9:3d:eb:e8:51:b7:ee:12:
+                    14:cb
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Basic Constraints: 
+                CA:FALSE
+            X509v3 Subject Key Identifier: 
+                7E:78:42:34:F7:65:74:3E:B4:AB:4C:33:53:17:3F:C1:53:B2:DD:0F
+            X509v3 Authority Key Identifier: 
+                keyid:10:DA:B2:12:E0:71:A6:76:DB:DA:A8:13:63:69:B0:49:D7:36:26:43
+                DirName:/CN=pro.ru
+                serial:68:E1:18:AB:04:08:41:BA:EA:87:36:B8:18:E2:40:A2:59:D1:6C:95
+
+            X509v3 Extended Key Usage: 
+                TLS Web Server Authentication
+            X509v3 Key Usage: 
+                Digital Signature, Key Encipherment
+            X509v3 Subject Alternative Name: 
+                DNS:inetrout
+    Signature Algorithm: ecdsa-with-SHA512
+         30:64:02:30:6d:27:b9:86:2c:dc:85:ae:9a:13:b1:8b:11:8f:
+         4b:cc:ed:bb:84:1d:ab:4c:90:8d:7e:6e:93:e6:34:c8:91:12:
+         0c:15:bd:be:b9:d2:dc:92:5f:d3:7f:c3:2c:1e:39:48:02:30:
+         68:94:df:43:5a:f7:a9:47:34:01:06:1a:ea:d5:05:cb:4f:80:
+         66:f9:81:27:e6:0d:cf:19:7e:49:9e:a7:94:63:0c:cd:b5:e5:
+         9f:8e:62:fa:a0:3b:1f:bd:8e:bb:53:57
+-----BEGIN CERTIFICATE-----
+MIIDLDCCArOgAwIBAgIRAIzjWgxXfx+xyW9asX8G6E8wCgYIKoZIzj0EAwQwETEP
+MA0GA1UEAwwGcHJvLnJ1MB4XDTI0MDQxNzA3MjQ0OVoXDTI3MDQwMjA3MjQ0OVow
+fzELMAkGA1UEBhMCcnUxDjAMBgNVBAgMBXBpdGVyMQ4wDAYDVQQHDAVwaXRlcjEP
+MA0GA1UECgwGcHJvLnJ1MQ8wDQYDVQQLDAZwcm8ucnUxETAPBgNVBAMMCGluZXRy
+b3V0MRswGQYJKoZIhvcNAQkBFgxhZG1pbkBwcm8ucnUwggEiMA0GCSqGSIb3DQEB
+AQUAA4IBDwAwggEKAoIBAQDWhINwB0kETTwxmOoBwW8npUJHXgPMOiFni02NMcjz
+vQYEYHU1yJe8SohddFRQoXiOX+89KMOG/tMpsUSdV+usxWH8UJLtZ7TKG30hgpE3
+tnUboNdH1WxVPSeRb4MQCT3kpMSDtZs+gGWKacMK6flJOHM/iBwdnjRIQhrLmLYz
+3j//pKMNyeYrA55fCJV79EG//NWp6Uw6XNQVAKvON7k8vuddt1ekk/BsPRKQ5YPA
+rHO65iSCixTq/wypXPbMaTGaHbkV1meB+fGFlnbGAse0fcDuXWSyEWUGaZj6zelJ
+7MFEG9LyjAhnmu569aSh2Ibu5kMatPzJPevoUbfuEhTLAgMBAAGjgbIwga8wCQYD
+VR0TBAIwADAdBgNVHQ4EFgQUfnhCNPdldD60q0wzUxc/wVOy3Q8wTAYDVR0jBEUw
+Q4AUENqyEuBxpnbb2qgTY2mwSdc2JkOhFaQTMBExDzANBgNVBAMMBnByby5ydYIU
+aOEYqwQIQbrqhza4GOJAolnRbJUwEwYDVR0lBAwwCgYIKwYBBQUHAwEwCwYDVR0P
+BAQDAgWgMBMGA1UdEQQMMAqCCGluZXRyb3V0MAoGCCqGSM49BAMEA2cAMGQCMG0n
+uYYs3IWumhOxixGPS8ztu4Qdq0yQjX5uk+Y0yJESDBW9vrnS3JJf03/DLB45SAIw
+aJTfQ1r3qUc0AQYa6tUFy0+AZvmBJ+YNzxl+SZ6nlGMMzbXln45i+qA7H72Ou1NX
+-----END CERTIFICATE-----
