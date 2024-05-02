@@ -241,7 +241,8 @@
   with_items:
     - 'apache2'  
     - 'mysql'
-    - 'rsyslog' 
+    - 'rsyslog'
+    - 'zabbix-agent'
     
 - name: Copy conf netplan
   ansible.builtin.copy:
