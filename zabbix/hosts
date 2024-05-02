@@ -1,0 +1,2 @@
+[servers]
+zabbix ansible_host=192.168.50.11 ansible_user=vagrant ansible_ssh_private_key_file=.vagrant/machines/zabbix/virtualbox/private_key 
