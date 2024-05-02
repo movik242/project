@@ -1,0 +1,143 @@
+
+# -*- mode: ruby -*-
+# vim: set ft=ruby :
+
+MACHINES = {
+  :inetrout => {
+        :box_name => "ubuntu",
+        :vm_name => "inetrout",
+        :net => [
+                   {ip: '192.168.50.15', adapter: 5},
+                ]
+  },
+  :rsyslogsrv => {
+        :box_name => "ubuntu",
+        :vm_name => "rsyslogsrv",
+        :net => [
+                   {ip: '192.168.50.12', adapter: 5},
+                ]
+  },  
+  :backup => {
+        :box_name => "ubuntu",
+        :vm_name => "backup",
+        :net => [
+                   {ip: '192.168.50.13', adapter: 5},
+                ]
+  },  
+  :postgres => {
+        :box_name => "ubuntu",
+        :vm_name => "postgres",
+        :net => [
+                   {ip: '192.168.50.10', adapter: 5},
+                ]
+  },  
+  :zabbix => {
+        :box_name => "ubuntu",
+        :vm_name => "zabbix",
+        :net => [
+                   {ip: '192.168.50.11', adapter: 5},
+                ]
+  }    
+}
+
+Vagrant.configure("2") do |config|
+
+  MACHINES.each do |boxname, boxconfig|
+    
+    config.vm.define boxname do |box|
+   
+      box.vm.box = boxconfig[:box_name]
+      box.vm.host_name = boxconfig[:vm_name]
+      
+
+      config.vm.provider "virtualbox" do |v|
+        v.memory = 1024
+        v.cpus = 2
+       end
+
+      boxconfig[:net].each do |ipconf|
+        box.vm.network "private_network", **ipconf
+      end
+      
+      box.vm.provision "shell", inline: <<-SHELL
+       mkdir -p ~root/.ssh; cp ~vagrant/.ssh/auth* ~root/.ssh
+       sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+       systemctl restart sshd
+       timedatectl set-timezone Europe/Moscow
+      SHELL
+      
+      case boxconfig[:vm_name]
+        when "inetrout"
+
+         box.vm.provision "ansible" do |ansible|
+         ansible.playbook = "inetrout/inetrout.yml"
+         ansible.inventory_path = "inetrout/hosts"
+         ansible.host_key_checking = "false"
+         ansible.become = "true"
+         ansible.limit = "all"
+         end
+
+        when "rsyslogsrv"
+         
+         box.vm.provision "ansible" do |ansible|
+         ansible.playbook = "rsyslog/rsyslogsrv.yml"
+         ansible.inventory_path = "rsyslog/hosts"
+         ansible.host_key_checking = "false"
+         ansible.become = "true"
+         ansible.limit = "all"
+         end
+
+        when "backup"
+
+         box.vm.provider :virtualbox do |vb|
+         vb_machine_folder = '/tmp/backup'
+         second_disk = File.join(vb_machine_folder, 'backup.vdi')
+         unless File.exist?(second_disk)
+            vb.customize ['createhd', '--filename', second_disk, '--format', 'VDI', '--size', 5 * 1024]
+         end
+         vb.customize ['storageattach', :id, '--storagectl', 'SATA Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', second_disk]
+         end
+
+         box.vm.provision "ansible" do |ansible|
+         ansible.playbook = "borg/backupsrv.yml"
+         ansible.inventory_path = "borg/hosts"
+         ansible.host_key_checking = "false"
+         ansible.become = "true"
+         ansible.limit = "all"
+         end
+
+        when "postgres"
+
+         box.vm.provision "ansible" do |ansible|
+         ansible.playbook = "postgres/postgres.yml"
+         ansible.inventory_path = "postgres/hosts"
+         ansible.host_key_checking = "false"
+         ansible.become = "true"
+         ansible.limit = "all"
+         end
+
+        when "zabbix"
+
+         box.vm.provision "ansible" do |ansible|
+         ansible.playbook = "zabbix/zabbix.yml"
+         ansible.inventory_path = "zabbix/hosts"
+         ansible.host_key_checking = "false"
+         ansible.become = "true"
+         ansible.limit = "all"
+         end
+
+        end
+    end
+  end
+end
+
+
+
+
+
+
+
+
+
+
+
