@@ -1,0 +1,256 @@
+---
+# tasks file for rsyslog
+- name: set timezone to Moscow
+  timezone:
+    name: Europe/Moscow
+    
+- name: Update Repository cache # Обновляем репозитории
+  ansible.builtin.apt:
+    update_cache: true
+
+- name: Install # установка программ и зависимостей
+  ansible.builtin.apt:
+    name: '{{ item }}'
+    state: present
+  with_items:
+    - 'apache2'
+    - 'libapache2-mod-php'
+    - 'net-tools'
+    - 'traceroute'
+    - 'wget'
+    - 'php7.4'
+    - 'php7.4-mysql'
+    - 'php7.4-curl'
+    - 'php7.4-xml'    
+    - 'php7.4-gd' 
+    - 'php7.4-json'
+    - 'php7.4-opcache'
+    - 'mysql-server'
+    - 'rsyslog-mysql'
+    - 'python3-pip'
+    - 'python3-psycopg2'
+    - 'python3-pexpect'
+    - 'bash-completion'
+    - 'zabbix-agent'
+    - 'borgbackup'
+    - 'openssl'
+    
+- name: Enable service #Включение сервисов
+  ansible.builtin.service:
+    name: '{{ item }}'
+    enabled: yes
+  with_items:
+    - 'apache2'
+    - 'mysql'         
+    
+- name: Start service #Старт сервисов 
+  ansible.builtin.service:
+    name: '{{ item }}'
+    state: started
+  with_items:
+    - 'apache2' 
+    - 'mysql'    
+
+- name: copy fail hosts # копируем hosts для настройки отображения
+  copy:
+    src: files/hosts
+    dest: /etc/hosts  
+  
+- name: copy fail info.php # копируем info.php для настройки отображения php
+  copy:
+    src: files/info.php
+    dest: /var/www/html/info.php    
+
+- name: Reload service # Перезапускаем apache
+  ansible.builtin.service:
+    name: '{{ item }}'
+    state: restarted
+  with_items:
+    - 'apache2'  
+
+- name: Add user rsyslog create a password for user rsyslog # пользователь rsyslog для mysql
+  user:
+    name: rsyslog
+    password: admin    
+
+- name: Run a script mysql # настройка БД для rsyslog
+  ansible.builtin.script: files/dbsyslog.sh
+  ignore_errors: yes
+
+- name: Create database and tables # Создание и установка БД
+  ansible.builtin.expect:
+    command: bash -c "sudo mysql -u rsyslog -D rsyslog -p < /usr/share/dbconfig-common/data/rsyslog-mysql/install/mysql" 
+    responses:
+      (?i)password: "admin"
+  ignore_errors: yes
+  
+- name: copy fail rsyslog.conf # копируем rsyslog.conf настройка портов
+  copy:
+    src: files/rsyslog.conf 
+    dest: /etc/rsyslog.conf     
+
+- name: copy fail mysql.conf # копируем mysql.conf настройка подключения к БД
+  copy:
+    src: files/mysql.conf 
+    dest: /etc/rsyslog.d/mysql.conf
+    
+- name: copy fail zabbix-agentd.conf # копируем zabbix-agentd.conf, настройка подключения к zabbix
+  copy:
+    src: files/zabbix_agentd.conf
+    dest: /etc/zabbix/zabbix_agentd.conf
+    
+- name: Run a script DB loganalyzer # добавление и настройка БД loganalyzer
+  ansible.builtin.script: files/dblogan.sh
+  ignore_errors: yes  
+
+- name: copy loganalyzer-4.1.12.tar.gz # копируем loganalyzer-4.1.12.tar.gz 
+  copy:
+    src: files/loganalyzer-4.1.12.tar.gz
+    dest: /home/vagrant
+  
+- name: Unarchive a file that is already on the remote machine # распаковка loganalyzer
+  ansible.builtin.unarchive:
+    src: /home/vagrant/loganalyzer-4.1.12.tar.gz
+    dest: /home/vagrant
+    remote_src: yes  
+  
+- name: Creates directory
+  ansible.builtin.file:
+    path: /var/www/html/loganalyzer
+    state: directory  
+  
+- name: copy failes loganalyzer # копируем папку loganalyzer
+  copy:
+    src: /home/vagrant/loganalyzer-4.1.12/src/  
+    dest: /var/www/html/loganalyzer
+    directory_mode: true
+    remote_src: yes 
+
+- name: copy fail config.php # копируем config.php
+  copy:
+    src: files/config.php  
+    dest: /var/www/html/loganalyzer/config.php 
+
+- name: Change file ownership, group and permissions
+  ansible.builtin.file:
+    path: /var/www/html/loganalyzer/config.php
+    owner: www-data
+    group: www-data
+    mode: '666'
+    
+- name: Reload service
+  ansible.builtin.service:
+    name: '{{ item }}'
+    state: restarted
+  with_items:
+    - 'rsyslog'
+    - 'apache2'    
+
+- name: Copy key to backup
+  ansible.builtin.copy:
+    src:  files/sshborg/
+    dest: /root/.ssh/
+    directory_mode: yes    
+    
+- name: Creates directory
+  ansible.builtin.file:
+    path: /root/.ssh/
+    state: directory
+    mode: '0700'    
+    
+- name: Chmod 666
+  ansible.builtin.file:
+    path: /root/.ssh/id_rsa
+    mode: '0600'
+ 
+- name: Chmod 666
+  ansible.builtin.file:
+    path: /root/.ssh/id_rsa.pub
+    mode: '0600'
+
+- name: Chmod 666
+  ansible.builtin.file:
+    path: /root/.ssh/config
+    mode: '0600'    
+
+- name: Copy timer, service to backup
+  ansible.builtin.copy:
+    src: files/borg-backup.service
+    dest: /etc/systemd/system/borg-backup.service
+    
+- name: Copy timer, service to borg
+  ansible.builtin.copy:
+    src: files/borg-backup.timer
+    dest: /etc/systemd/system/borg-backup.timer     
+    
+- name: Copy key for https
+  ansible.builtin.copy:
+    src: files/sslhttps/
+    dest: /usr/local/share/ca-certificates/
+    directory_mode: yes
+
+- name: install ca package on debian systems
+  apt:
+    name: ca-certificates
+    state: present
+    update_cache: yes 
+
+- name: Remove file (delete file)
+  ansible.builtin.file:
+    path: /etc/apache2/sites-enabled/default-ssl.conf
+    state: absent
+    
+- name: Remove file (delete file)
+  ansible.builtin.file:
+    path: /etc/apache2/sites-enabled/000-default.conf
+    state: absent    
+
+- name: Copy key for https
+  ansible.builtin.copy:
+    src: files/sslhttps/rsyslog.crt
+    dest: /etc/ssl/certs/rsyslog.crt
+  
+- name: Copy key for https
+  ansible.builtin.copy:
+    src: files/sslhttps/rsyslog.key
+    dest: /etc/ssl/private/rsyslog.key
+    
+- name: enable ssl apache site  # включаем ssl для сайта
+  ansible.builtin.shell: bash -c "sudo a2ensite default-ssl"
+  
+- name: enable ssl apache site  # включаем ssl для сайта
+  ansible.builtin.shell: bash -c "sudo a2enmod ssl"
+  
+- name: Copy timer, service to backup
+  ansible.builtin.copy:
+    src: files/default-ssl.conf
+    dest: /etc/apache2/sites-enabled/default-ssl.conf
+
+- name: Enable service #Включение сервисов
+  ansible.builtin.service:
+    name: '{{ item }}'
+    enabled: yes
+  with_items:
+    - 'borg-backup.service'
+    - 'borg-backup.timer' 
+
+- name: Reload service # Перезапускаем apache
+  ansible.builtin.service:
+    name: '{{ item }}'
+    state: restarted
+  with_items:
+    - 'apache2'  
+    - 'mysql'
+    - 'rsyslog' 
+    
+- name: Copy conf netplan
+  ansible.builtin.copy:
+    src:  files/netplan/
+    dest: /etc/netplan/
+    directory_mode: yes 
+    
+- name: Netplan apply
+  ansible.builtin.shell:
+    cmd: bash -c "sudo netplan apply"  
+  ignore_errors: yes        
+

@@ -1,0 +1,5 @@
+---
+# vars file for rsyslog
+
+vars:
+    user_pass: "admin"
