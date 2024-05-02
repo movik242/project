@@ -5,6 +5,8 @@
 
 Проект состоит из 5 виртуальных машин: zabbix, inetrout, postgres, backup, rsyslog
 
+Отдельно лежит vagrantfile, который при запуске устанавливает и разворачивает все 5 ВМ
+
 IP-адресация ВМ </br>
 zabbix - 192.168.50.11 </br>
 inetrout - 192.168.50.15 </br>
@@ -15,6 +17,17 @@ rsyslog - 192.168.50.12 </br>
 В системе используется вымышленное доменное имя PRO.RU
 
 Посмотреть скриншоты по конечной настройке в веб интерфесе каждой системы можно <a href="https://github.com/movik242/project/tree/main/inetrout/inetrout/files/site">здесь</a>, либо после установки по адресу https://192.168.50.15  
+
+ОС для ВМ Ubuntu 20.04, 
+
+            Vagrant.configure("2") do |config|
+              config.vm.box = "generic/ubuntu2004"
+            end
+
+Чтобы не закачивать сборку для каждой ВМ, лучше скачать на свою host-ую машину и добавить в vagrant, пример
+
+            vagrant box add /home/<Ваш_user>/<имя_файла>.box --name=ubuntu
+            vagrant up
 
 Inetrout - шлюз, на сервере настроен iptables, для остальные ВМ выход в сеть интернет настроен через этот шлюз.
 
@@ -70,4 +83,20 @@ Backup - система бекапа, в каждой ВМ настроен се
 
 
 ![image](https://github.com/movik242/project/assets/143793993/e8896eb3-2d53-4733-862a-049a21a1adb9)
+
+В каждой папке с именем ВМ лежит vagrantfile, для отдельной установки именно этой ВМ, на случай, если ВМ установилась не правильно, либо допущены ошибки при ручной настройке.
+
+Возможные ошибки при установке: 
+
+1) При повторной установке ВМ postgres через ansible, если ВМ уже развернута, будут ошибки по настройке БД zabbix, так как база уже присутствует в системе. Решение: Удалить ВМ полностью и запустить playbook
+2) При инициации бэкапа, ошибка выполнения. Решение: на ВМ backup проверить права на папку /opt/backup, владелец должен быть borg
+3) Zabbix - ошибка тестовой отправки в telegram. Решение: Перезагрузить ВМ inetrout.
+
+Литература:
+
+1. https://serveradmin.ru/nastroyka-opoveshheniy-zabbix-v-telegram/
+2. https://habr.com/ru/articles/213519/
+3. https://ruvds.com/ru/helpcenter/postgresql-pgadmin-ubuntu/
+
+
 
