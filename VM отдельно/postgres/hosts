@@ -1,2 +1,0 @@
-[servers]
-postgres ansible_host=192.168.50.10 ansible_user=vagrant ansible_ssh_private_key_file=.vagrant/machines/postgres/virtualbox/private_key 

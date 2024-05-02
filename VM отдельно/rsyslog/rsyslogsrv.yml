@@ -1,6 +1,0 @@
----
-- hosts: rsyslogsrv
-  become: yes
-  roles:
-    - rsyslog
-...

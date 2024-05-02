@@ -1,6 +1,0 @@
----
-- hosts: postgres
-  become: yes
-  roles:
-    - database
-...

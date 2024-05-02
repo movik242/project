@@ -1,6 +1,0 @@
----
-- hosts: backup
-  become: yes
-  roles:
-    - backupsrv
-...
